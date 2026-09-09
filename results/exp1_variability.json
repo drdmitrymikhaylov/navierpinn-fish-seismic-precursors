@@ -1,0 +1,360 @@
+{
+ "config": {
+  "n_recordings": 504,
+  "n_fish": 39,
+  "n_bouts": 15995,
+  "median_duration_s": 26.190668132302463,
+  "total_hours": 6.354276696551744,
+  "sigmas": [
+   2.0,
+   3.0,
+   4.0
+  ]
+ },
+ "icc": {
+  "bout_rate": {
+   "icc": 0.21664332047997217,
+   "var_between": 0.02721785964564269,
+   "var_within": 0.0984165683410668,
+   "n_groups": 39,
+   "n": 504,
+   "group": "activity"
+  },
+  "ibi_median": {
+   "icc": 0.21754637744594693,
+   "var_between": 0.033329580591383134,
+   "var_within": 0.11987720217687707,
+   "n_groups": 39,
+   "n": 504,
+   "group": "activity"
+  },
+  "ibi_cv": {
+   "icc": 0.13599106116811485,
+   "var_between": 0.028343954797611808,
+   "var_within": 0.18008117663490525,
+   "n_groups": 39,
+   "n": 504,
+   "group": "activity"
+  },
+  "displacement_median": {
+   "icc": 0.28433699474271,
+   "var_between": 48.44272157997338,
+   "var_within": 121.92807953160225,
+   "n_groups": 39,
+   "n": 504,
+   "group": "activity"
+  },
+  "distance_per_s": {
+   "icc": 0.2535454348055839,
+   "var_between": 120.21860907467715,
+   "var_within": 353.9315532694391,
+   "n_groups": 39,
+   "n": 504,
+   "group": "activity"
+  },
+  "turn_dispersion": {
+   "icc": 0.1289051066680037,
+   "var_between": 7.596500229923264e-05,
+   "var_within": 0.0005133444848328887,
+   "n_groups": 39,
+   "n": 504,
+   "group": "turning"
+  },
+  "turn_abs_median": {
+   "icc": 0.17686051677916587,
+   "var_between": 1.8046420802896967,
+   "var_within": 8.399116865767411,
+   "n_groups": 39,
+   "n": 504,
+   "group": "turning"
+  },
+  "large_turn_fraction": {
+   "icc": 0.2367540640630493,
+   "var_between": 0.0030364456430434722,
+   "var_within": 0.00978887017596965,
+   "n_groups": 39,
+   "n": 504,
+   "group": "turning"
+  },
+  "turn_persistence": {
+   "icc": 0.01873116442488059,
+   "var_between": 0.0004197720689693751,
+   "var_within": 0.02199058424672193,
+   "n_groups": 39,
+   "n": 504,
+   "group": "turning"
+  },
+  "centre_distance_median": {
+   "icc": 0.07765309828192038,
+   "var_between": 324.8483244440679,
+   "var_within": 3858.4789558751622,
+   "n_groups": 39,
+   "n": 504,
+   "group": "space use"
+  },
+  "area_explored": {
+   "icc": 0.05275566023407108,
+   "var_between": 0.0006700329441469231,
+   "var_within": 0.012030650568751227,
+   "n_groups": 39,
+   "n": 504,
+   "group": "space use"
+  }
+ },
+ "tails": {
+  "bout_rate": {
+   "excess_kurtosis": 0.6284196425068553,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.04365079365079365,
+    "ratio": 0.9593525380473055
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.00992063492063492,
+    "ratio": 3.674586779215858
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.0,
+    "ratio": 0.0
+   }
+  },
+  "ibi_median": {
+   "excess_kurtosis": 7.817913128953267,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.041666666666666664,
+    "ratio": 0.9157456044997007
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.01984126984126984,
+    "ratio": 7.349173558431716
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.00992063492063492,
+    "ratio": 156.61897586630926
+   }
+  },
+  "ibi_cv": {
+   "excess_kurtosis": 10.561885353538171,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.047619047619047616,
+    "ratio": 1.046566405142515
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.021825396825396824,
+    "ratio": 8.084090914274888
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.00992063492063492,
+    "ratio": 156.61897586630926
+   }
+  },
+  "displacement_median": {
+   "excess_kurtosis": 0.40845038735194805,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.041666666666666664,
+    "ratio": 0.9157456044997007
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.007936507936507936,
+    "ratio": 2.9396694233726866
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.0,
+    "ratio": 0.0
+   }
+  },
+  "distance_per_s": {
+   "excess_kurtosis": 2.1177021531066647,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.057539682539682536,
+    "ratio": 1.264601072880539
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.013888888888888888,
+    "ratio": 5.144421490902202
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.001984126984126984,
+    "ratio": 31.323795173261853
+   }
+  },
+  "turn_dispersion": {
+   "excess_kurtosis": 10.65438053331341,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.04563492063492063,
+    "ratio": 1.0029594715949102
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.02976190476190476,
+    "ratio": 11.023760337647575
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.00992063492063492,
+    "ratio": 156.61897586630926
+   }
+  },
+  "turn_abs_median": {
+   "excess_kurtosis": 8.993707619239048,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.05357142857142857,
+    "ratio": 1.1773872057853294
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.01984126984126984,
+    "ratio": 7.349173558431716
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.013888888888888888,
+    "ratio": 219.26656621283297
+   }
+  },
+  "large_turn_fraction": {
+   "excess_kurtosis": 2.040958605928031,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.04563492063492063,
+    "ratio": 1.0029594715949102
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.017857142857142856,
+    "ratio": 6.614256202588545
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.003968253968253968,
+    "ratio": 62.64759034652371
+   }
+  },
+  "turn_persistence": {
+   "excess_kurtosis": 0.333352535140488,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.06349206349206349,
+    "ratio": 1.3954218735233535
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.001984126984126984,
+    "ratio": 0.7349173558431716
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.0,
+    "ratio": 0.0
+   }
+  },
+  "centre_distance_median": {
+   "excess_kurtosis": -0.2912661075553,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.03968253968253968,
+    "ratio": 0.8721386709520959
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.001984126984126984,
+    "ratio": 0.7349173558431716
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.0,
+    "ratio": 0.0
+   }
+  },
+  "area_explored": {
+   "excess_kurtosis": 3.1108325310706944,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.04563492063492063,
+    "ratio": 1.0029594715949102
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.011904761904761904,
+    "ratio": 4.40950413505903
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.003968253968253968,
+    "ratio": 62.64759034652371
+   }
+  }
+ },
+ "tails_bout_level": {
+  "turn_angle_deg": {
+   "excess_kurtosis": 47.556464433509646,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.05151311365164761,
+    "ratio": 1.1321497776141558
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.01862811028917283,
+    "ratio": 6.899821265269234
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.008406186953597848,
+    "ratio": 132.7100938746131
+   }
+  },
+  "displacement": {
+   "excess_kurtosis": 3.767871350817421,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.0429724277067922,
+    "ratio": 0.9444434828922267
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.012373907195696032,
+    "ratio": 4.583274775485701
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.003093476798924008,
+    "ratio": 48.83731454585762
+   }
+  },
+  "inter_bout_interval_s": {
+   "excess_kurtosis": 414.85200178624444,
+   "2sigma": {
+    "nominal": 0.04550026389635844,
+    "realised": 0.02020528048544316,
+    "ratio": 0.4440695230134757
+   },
+   "3sigma": {
+    "nominal": 0.0026997960632601913,
+    "realised": 0.010909560389903815,
+    "ratio": 4.040883138680394
+   },
+   "4sigma": {
+    "nominal": 6.334248366623993e-05,
+    "realised": 0.006455361177457879,
+    "ratio": 101.912031291227
+   }
+  }
+ }
+}
