@@ -60,6 +60,7 @@ Eleven metrics, grouped by what they report:
 | 4 | Calibrating the threshold on the data instead of on a Gaussian fixes most of it — 1% promised, 1.5% delivered — and the residual 1.5× is the price of meeting a fish the detector has never seen. | §3 |
 | 5 | Fixing one metric in advance roughly doubles the power of the same detector at the same false-alarm rate: 0.83 against 0.51 for a one-SD change over seven minutes. | §4 |
 | 6 | Seven minutes of observation are needed to detect a one-standard-deviation behavioural change with 80% probability. A single 26-second recording detects a **three**-SD change less than half the time. | §4 |
+| 7 | Space use is a drift–diffusion process, and the recordings never reach its steady state: a fish released near the centre needs **155 s** to forget where it started, six times the length of a recording. The "distance from centre" metric in these data measures where the fish was put, not where it lives, and a 50% stronger wall drift is worth only 0.66 SD after 26 s. | §5 |
 
 ---
 
@@ -209,11 +210,72 @@ a threshold high enough to survive eleven heavy tails. This is the practical
 form of the multiple-comparisons rule, and it argues for a single named
 primary endpoint fixed before the recording starts.
 
+
+---
+
+## 5. Space use as physics: what the wall metric actually measures
+
+![space use](figures/05_space_use_physics.png)
+
+Thigmotaxis — staying near the wall — is the standard anxiety-like readout
+in fish, reported as one number, the median distance from the centre. That
+number is the steady state of a physical process. Bout to bout, the radial
+position is a random walk with a position-dependent drift a(r) toward the
+wall and a position-dependent diffusion D(r), and both can be measured from
+the 15 450 transitions in the data by the Gaussian transition likelihood
+(two small networks, one for each; the binned conditional moments are
+plotted over them as the check). The drift is outward everywhere, rising
+from 0.003 to 0.015 arena half-widths per second between the middle and the
+wall; the diffusion falls by a factor of four over the same range.
+
+With a(r) and D(r) in hand the Fokker–Planck equation
+
+∂p/∂t = −∂/∂r [a(r) p] + ∂²/∂r² [D(r) p],  reflecting walls,
+
+has a stationary solution in closed form and a time-dependent one that a
+physics-informed network solves; the finite-difference solution is the
+check, and the network agrees with it to **1.4% of the peak** and returns
+the same relaxation time. Two things come out of the dynamics, and neither
+was visible from the metric alone.
+
+**The recordings are transients.** The stationary solution puts 90% of the
+density within 10% of the wall and has median radius 0.96; the observed
+median is 0.56 (KL divergence 4.4). Those are not the same distribution,
+and the reason is in the recordings themselves: they start with the fish
+near the centre (median first-bout radius 0.50, 1% at the wall) and **89%
+of them end at the wall** (median last-bout radius 0.93). A fish released at
+r = 0.2 needs **155 s** for its radial distribution to come within 10% of
+the steady state; a recording is 26 s. The distance-from-centre metric of
+§1–§3 is therefore a measurement of the release point and the elapsed time,
+not of a stable preference — which is also why it has one of the lowest
+between-fish ICCs (0.08) in §2: there is no individual there to measure yet.
+
+**A stressor that changes the drift is small in one recording.** Starting
+from the observed first-bout distribution and integrating for 26 s, a 50%
+stronger wall drift moves the median radius from 0.84 to 0.93 — **0.66
+robust SD** of the metric's between-recording spread — and a doubled drift
+gives 0.85 SD. Read against the power table of §4, that is a change a single
+recording catches about one time in twenty, and sixteen pooled recordings
+catch four times in five. The physics puts the size of a plausible stress
+effect on the same scale as the detector's power, which is the number a
+pre-registered protocol needs and which the empirical §4 could not supply
+on its own.
+
+*On the network.* A network for p(r, t) itself failed twice and the failures
+are kept in the source: with a soft initial condition it found the trivial
+solution p = 0 for t > 0; with a hard initial condition and a mass
+constraint it could not build the boundary layer at the wall, where the
+stationary density peaks at 14. The version that works solves for
+u = ln(p / p_stationary), for which the equation becomes
+u_t = D u_rr + a u_r + D u_r² — no boundary layer, no trivial solution,
+reflecting walls as u_r = 0. The change of variable, not the network, is
+the method.
+
 ---
 
 ## Verification
 
-Eight checks, all passing:
+Ten checks, all passing (two need PyTorch and are skipped without it):
 
 - the loader returns strictly increasing bout times and the quality gate
   rejects a track placed outside the arena
@@ -227,6 +289,11 @@ Eight checks, all passing:
   a property of the fish and not of the estimator
 - the heavy tails are pinned as a test, so a refactor cannot quietly lose them
 - the single-metric statistic never exceeds the scan statistic, by construction
+- **the learned drift and diffusion reproduce the binned conditional
+  moments** (correlation > 0.85 across bins) and the stationary density
+  integrates to one
+- **the log-ratio PINN matches the finite-difference solution** of the
+  Fokker–Planck equation to 5% of the peak at every saved time
 
 ---
 
@@ -250,19 +317,31 @@ Eight checks, all passing:
   more channels to detect it in, less time in each.
 - **Eleven metrics is a choice.** Adding more raises the scan threshold
   further; the single-endpoint result is the argument for not doing that.
+- **The drift–diffusion model is one-dimensional and Markov in the
+  radius.** Heading persistence and the possibility that recordings were
+  stopped when the fish reached the wall (89% end there) both bias the
+  near-wall drift estimate; the transient conclusion does not depend on
+  them, the 155 s does.
 
 ---
 
 ## Source code
 
-**The source code for this project is not public.** This page documents the
-data, the method, the measurements and the conclusions; the implementation is
-held in a private repository and is available under NDA.
+The analysis code is public, in `src/`:
 
-What is described here: the bout-level loader and tracking-quality gate, the
-eleven behavioural metrics, the variance decomposition, the tail
-characterisation, the frozen detector and its two threshold rules, and the
-injection-based power analysis.
+| file | what it is |
+|---|---|
+| `behaviour.py` | bout-level loader, tracking-quality gate, the eleven metrics |
+| `exp1_variability.py` | ICC(1) variance decomposition and the tail characterisation |
+| `exp2_detector.py` | the frozen detector, its two threshold rules, false alarms and power |
+| `exp3_fp_pinn.py` | neural Kramers–Moyal drift/diffusion, stationary and finite-difference Fokker–Planck, the log-ratio PINN (PyTorch) |
+| `tests/test_all.py` | the ten checks above |
+
+The recordings are not redistributed; `data/SOURCE.md` says where they come
+from and gives the three-line conversion from the authors' `.mat` file.
+With the file in `data/`, `python3 tests/test_all.py` runs in about a
+minute and `exp3_fp_pinn.py` in ten. The figure scripts and the pooled-power
+sweeps are held privately.
 
 ---
 

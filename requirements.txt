@@ -1,0 +1,3 @@
+numpy
+scipy
+torch  # exp3_fp_pinn.py only
