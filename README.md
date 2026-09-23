@@ -58,8 +58,8 @@ Eleven metrics, grouped by what they report:
 | 2 | A three-sigma rule on a single behavioural metric fires 3 to 11 times more often than it promises. On the multivariate scan it is **12 times** more often: 36% of windows instead of 3%. | Heavy tails; A frozen detector |
 | 3 | Individual identity is not the problem it is usually assumed to be. No metric has an intraclass correlation above 0.28, so a population baseline is usable and per-animal calibration is not essential. | The animal or the moment |
 | 4 | Calibrating the threshold on the data instead of on a Gaussian fixes most of it — 1% promised, 1.5% delivered. The residual 1.5× is the price of meeting a fish the detector has never seen. | A frozen detector |
-| 5 | Fixing one metric in advance roughly doubles the power of the same detector at the same false-alarm rate: 0.83 against 0.51 for a one-SD change over seven minutes. | How long a look |
-| 6 | Seven minutes of observation are needed to detect a one-standard-deviation behavioural change with 80% probability. A single 26-second recording detects a **three**-SD change less than half the time. | How long a look |
+| 5 | Fixing one metric in advance roughly doubles the power of the same detector: 0.83 against 0.51 for a one-SD change over seven minutes, and at a *lower* delivered false-alarm rate (4.0% against 6.7%), so the comparison is not at equal false alarms and understates the gap. | How long a look |
+| 6 | Seven minutes of observation are needed to detect a one-standard-deviation behavioural change with 80% probability. A single 26-second recording detects a **three**-SD change less than half the time. The seven-minute figure is bought at a delivered false-alarm rate of **4%**, not the 1% it was calibrated to: pooling shrinks the noise but not the gap between the calibration fish and new ones. | How long a look; Where the pooled power table gets it wrong |
 | 7 | Space use is a drift–diffusion process, and the recordings never reach its steady state. A fish released near the centre needs **155 s** to forget where it started, six times the length of a recording. The "distance from centre" metric in these data measures where the fish was put, not where it lives, and a 50% stronger wall drift is worth only 0.66 SD after 26 s. | Space use as physics |
 
 ### Heavy tails
@@ -80,14 +80,24 @@ This matters in practice. A threshold at three standard deviations is chosen
 because it corresponds to 0.27% of observations. On these quantities it
 corresponds to:
 
-| bout-level quantity | excess kurtosis | 3σ exceedance | times the promise |
-|---|---|---|---|
-| turn angle | 47.6 | 1.86% | 7× |
-| displacement | 3.8 | 1.24% | 5× |
-| inter-bout interval | 414.9 | 1.09% | 4× |
+| bout-level quantity | excess kurtosis | 3σ exceedance | times the promise | at 2σ | at 4σ |
+|---|---|---|---|---|---|
+| turn angle | 47.6 | 1.86% | 7× | 1.1× | **133×** (1 in 119) |
+| displacement | 3.8 | 1.24% | 5× | 0.9× | 49× (1 in 323) |
+| inter-bout interval | 414.9 | 1.09% | 4× | 0.4× | 102× (1 in 155) |
 
 At one decision per minute, "one false alarm in 370" and "one false alarm in
 54" are the difference between four a day and twenty-seven.
+
+The last two columns say where the tail starts. At two sigma all three
+quantities are at or below the Gaussian promise (the inter-bout interval at
+less than half of it: the bulk is narrower than its standard deviation
+suggests, because the standard deviation is itself inflated by the tail).
+At four sigma, where a Gaussian rule promises one exceedance in 15 800, the
+turn angle delivers one in 119. Raising the threshold from three to four
+sigma cuts the *promised* false-alarm rate by 43× and the *delivered* one by
+2.2× (1.86% to 0.84%). A stricter Gaussian threshold buys almost nothing on
+these data; a calibrated one is the only kind that means what it says.
 
 ### The animal or the moment
 
@@ -202,6 +212,51 @@ a threshold high enough to survive eleven heavy tails. This is the practical
 form of the multiple-comparisons rule. It argues for a single named primary
 endpoint fixed before the recording starts.
 
+### Where the pooled power table gets it wrong
+
+The power tables above are read at "the calibrated 1% false-alarm
+threshold". That is true of the one-recording row and progressively less
+true of the others. The zero-effect column of the same sweep, which the
+earlier text did not report, is the false-alarm rate the pooled detector
+actually delivers on undisturbed held-out fish:
+
+| pooled recordings | minutes | single: delivered | vs 1% promised | scan: delivered | vs 1% promised |
+|---|---|---|---|---|---|
+| 1 | 0.4 | 1.58% | 1.6× | 1.50% | 1.5× |
+| 2 | 0.9 | 1.63% | 1.6× | 1.85% | 1.8× |
+| 4 | 1.7 | 1.91% | 1.9× | 2.24% | 2.2× |
+| 8 | 3.5 | 2.38% | 2.4× | 3.54% | 3.5× |
+| 16 | 7.0 | **4.02%** | 4.0× | **6.66%** | 6.7× |
+
+So the design number, "seven minutes buys a one-SD change at 83%", was
+bought at a delivered false-alarm rate of 4%, not 1%; the scan's 0.51 at
+the same point came with 6.7%. Net of false alarms the seven-minute figures
+are 0.79 (single) and 0.44 (scan), and the pre-specified metric's advantage
+over the scan is slightly larger than stated, not smaller.
+
+The mechanism is the one from "The animal or the moment", turned around.
+Averaging k recordings shrinks the record-to-record spread by √k. It does
+not shrink the offset between the 23 fish the threshold was calibrated on
+and the 16 it is tested on, which is a between-fish quantity and is fixed
+for the split. The size of the effect is set by the ICC. For a mean of k
+records with ICC 0.22 (bout rate), the between-fish share of the variance
+is k·ICC / (1 + (k−1)·ICC): 0.22 at one record, 0.53 at four, **0.82 at
+sixteen**. Identity is "not the problem" for a single recording because it
+is a fifth of the variance there. Pool sixteen and it is four fifths, and
+the calibration gap that cost 1.5× at one record costs 4× at sixteen. The
+two findings are the same fact seen from either end. (The pooled records
+here are drawn from all 16 held-out fish, so the sweep is if anything
+kinder than a real tank, where the k records come from the same few
+animals.) The practical consequence is that a monitoring system
+integrating over minutes needs its threshold calibrated on pooled records
+from *other* animals, at the same k, and should budget for a
+generalisation overshoot that grows with the integration time rather than
+the fixed 1.5× quoted above.
+
+These numbers come from `src/pooling_check.py`, which reads the two results
+files and writes `results/pooling_check.json`; `tests/test_readme_numbers.py`
+pins the tables on this page to those files.
+
 ---
 
 ## Space use as physics
@@ -231,7 +286,7 @@ visible from the metric alone.
 
 **The recordings are transients.** The stationary solution puts 90% of the
 density within 10% of the wall and has median radius 0.96. The observed
-median is 0.56 (KL divergence 4.4). Those are not the same distribution,
+median is 0.55 (KL divergence 4.4). Those are not the same distribution,
 and the reason is in the recordings themselves. They start with the fish
 near the centre (median first-bout radius 0.50, 1% at the wall) and **89%
 of them end at the wall** (median last-bout radius 0.93). A fish released at
@@ -325,13 +380,16 @@ The analysis code is public, in `src/`:
 | `exp1_variability.py` | ICC(1) variance decomposition and the tail characterisation |
 | `exp2_detector.py` | the frozen detector, its two threshold rules, false alarms and power |
 | `exp3_fp_pinn.py` | neural Kramers–Moyal drift/diffusion, stationary and finite-difference Fokker–Planck, the log-ratio PINN (PyTorch) |
+| `pooling_check.py` | false-alarm rate of the pooled detector vs k, the √k / ICC arithmetic, 2σ/3σ/4σ tails — from the results files alone, no recordings needed |
 | `tests/test_all.py` | the ten checks below |
+| `tests/test_readme_numbers.py` | pins the tables on this page to `results/*.json` (runs without the recordings) |
 
 The recordings are not redistributed; `data/SOURCE.md` says where they come
 from and gives the three-line conversion from the authors' `.mat` file.
 With the file in `data/`, `python3 tests/test_all.py` runs in about a
-minute and `exp3_fp_pinn.py` in ten. The figure scripts and the pooled-power
-sweeps are held privately.
+minute and `exp3_fp_pinn.py` in ten. The figure scripts are held privately
+(the pooled-power sweep is in `exp2_detector.py`; an earlier version of this
+sentence said otherwise).
 
 Ten checks, all passing (two need PyTorch and are skipped without it):
 
