@@ -1,11 +1,22 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
-title: "navierpinn-fish-seismic-precursors"
+title: "NavierPINN: A Fish-Behaviour Baseline for Earthquake-Precursor Claims"
+abstract: "Fish-behaviour baseline for earthquake-precursor claims"
 authors:
   - family-names: Mikhaylov
     given-names: Dmitry
     orcid: "https://orcid.org/0009-0009-2108-6820"
+    affiliation: "Abu Dhabi Maritime Academy, AD Ports Group"
 repository-code: "https://github.com/drdmitrymikhaylov/navierpinn-fish-seismic-precursors"
+url: "https://github.com/drdmitrymikhaylov/navierpinn-fish-seismic-precursors"
 license: "CC-BY-4.0"
-year: 2026
+keywords:
+  - "animal behaviour"
+  - "anomaly detection"
+  - "aquaculture"
+  - "behavioural monitoring"
+  - "ethology"
+  - "statistical power"
+  - "zebrafish"
+date-released: "2026-09-09"
