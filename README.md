@@ -22,6 +22,10 @@ interesting question can be asked.
 
 ---
 
+## Where the tank is
+
+Can animals sense an earthquake before it strikes? I am testing it. At the academy in Abu Dhabi there is now a tank running with fish, cameras and field instruments on one clock. This repository builds the foundation for it: a rigorous baseline of normal fish behaviour, so that when the ground moves, the signal stands out.
+
 ## What was measured
 
 523 recordings of spontaneous swimming from **39 larval zebrafish**, 16 147
