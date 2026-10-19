@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-10-19
+
+- The scan's calibrated threshold (robust z 11.97 vs 3.15 for the single
+  metric) was never explained. Re-run of exp2's 200 splits with the arg-max
+  kept: turn dispersion owns 57 % of the scan's alarms, median absolute turn
+  28 %, seven of the eleven metrics (the primary among them) none. At one
+  recording the scan's power equals its false-alarm rate (1.50 %) at every
+  shift up to 3 SD — exactly blind, not "nearly". Leave-one-metric-out buys
+  at most 0.04 of power; a per-metric calibrated scan needs each metric's
+  sample maximum (q = 0.9998) and delivers 3.8 % / 10.9 % false alarms at
+  1 / 16 recordings. Minimum detectable effect at 80 %: single 2.8 / 1.9 /
+  1.4 / 0.97 SD at 2 / 4 / 8 / 16 recordings, scan 2.0 / 1.35 at 8 / 16.
+  New section "Who sets the scan's threshold", finding 8, two sentences in
+  "How long a look" qualified ("eleven heavy tails" → two).
+  `src/scan_threshold_check.py`, `results/scan_threshold_check.json`,
+  `tests/test_scan_threshold.py` (6 tests). Two tracked `._*` files removed.
+
 ## 2026-09-23
 
 - The pooled power table was read at "the calibrated 1 % false-alarm rate";

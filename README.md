@@ -65,6 +65,7 @@ Eleven metrics, grouped by what they report:
 | 5 | Fixing one metric in advance roughly doubles the power of the same detector: 0.83 against 0.51 for a one-SD change over seven minutes, and at a *lower* delivered false-alarm rate (4.0% against 6.7%), so the comparison is not at equal false alarms and understates the gap. | How long a look |
 | 6 | Seven minutes of observation are needed to detect a one-standard-deviation behavioural change with 80% probability. A single 26-second recording detects a **three**-SD change less than half the time. The seven-minute figure is bought at a delivered false-alarm rate of **4%**, not the 1% it was calibrated to: pooling shrinks the noise but not the gap between the calibration fish and new ones. | How long a look; Where the pooled power table gets it wrong |
 | 7 | Space use is a drift–diffusion process, and the recordings never reach its steady state. A fish released near the centre needs **155 s** to forget where it started, six times the length of a recording. The "distance from centre" metric in these data measures where the fish was put, not where it lives, and a 50% stronger wall drift is worth only 0.66 SD after 26 s. | Space use as physics |
+| 8 | The scan's threshold is a robust z of **12** against 3.15 for the single metric, and two metrics set it: turn dispersion owns 57 % of the scan's alarms, median absolute turn 28 %, and seven of the eleven — the primary among them — never fire. At one recording the scan is *exactly* blind to a 3 SD change in the primary (detection 1.50 %, its false-alarm rate). Dropping the worst metric buys 0.03 of power; calibrating each metric in its own tail needs the 1-in-1100 tail of each, which 300 recordings cannot supply (delivered 3.8 %). | Who sets the scan's threshold |
 
 ### Heavy tails
 
@@ -202,7 +203,9 @@ And the same for the scan over all eleven metrics:
 
 **A single short recording is nearly blind.** Even a three-standard-deviation
 change — a fish behaving unlike 99.7% of undisturbed recordings — is caught
-less than half the time in 26 seconds.
+less than half the time in 26 seconds. For the scan it is not "nearly": its
+detection rate at one recording is 1.50 % at every shift up to 3 SD, the same
+as its false-alarm rate (see "Who sets the scan's threshold").
 
 **Seven minutes buys a one-SD change at 83%.** That is the design number. A
 monitoring system that must react to a moderate behavioural change needs
@@ -212,7 +215,9 @@ by the frame rate.
 **Deciding what to look at, in advance, is worth as much as looking twice as
 long.** At one SD over seven minutes the pre-specified metric reaches 0.83 and
 the scan 0.51. The scan pays for its freedom to find the change anywhere with
-a threshold high enough to survive eleven heavy tails. This is the practical
+a threshold high enough to survive the two heaviest of the eleven tails (turn
+dispersion and median absolute turn set it between them; the section after
+next has the per-metric table). This is the practical
 form of the multiple-comparisons rule. It argues for a single named primary
 endpoint fixed before the recording starts.
 
@@ -260,6 +265,95 @@ the fixed 1.5× quoted above.
 These numbers come from `src/pooling_check.py`, which reads the two results
 files and writes `results/pooling_check.json`; `tests/test_readme_numbers.py`
 pins the tables on this page to those files.
+
+### Who sets the scan's threshold
+
+The scan is the maximum of eleven absolute robust z-scores, and its
+calibrated threshold is a robust z of **11.97** (median over the 200 splits)
+against **3.15** for the single metric — 3.8 times higher. The same 200
+splits re-run with the per-metric picture kept (`src/scan_threshold_check.py`;
+the exp2 pooled sweep reproduces exactly on the way) say where that number
+comes from:
+
+| metric | 99th percentile of \|z\| in training | 99.9th | share of the scan's held-out alarms |
+|---|---|---|---|
+| turn dispersion | 10.17 | 14.55 | 57 % |
+| median absolute turn | 8.01 | 11.70 | 28 % |
+| inter-bout interval median | 6.58 | 9.56 | 6 % |
+| inter-bout interval CV | 6.36 | 10.73 | 9 % |
+| distance per second | 4.52 | 5.73 | 0 % |
+| area explored | 4.16 | 5.82 | 0 % |
+| large-turn fraction | 3.64 | 4.29 | 0 % |
+| displacement median | 3.23 | 3.66 | 0 % |
+| bout rate | 3.15 | 3.90 | 0 % |
+| turn persistence | 2.89 | 3.58 | 0 % |
+| centre distance (thigmotaxis) | 2.41 | 2.88 | 0 % |
+
+Two metrics set the threshold. Turn dispersion is the arg-max in **57 %** of
+the scan's held-out alarms and median absolute turn in 28 %; the two
+inter-bout-interval metrics take the remaining 15 %, and **seven of the
+eleven metrics — the primary among them — fire in none** (their own 99.9th
+percentiles, 2.9–5.8, never reach 12). The scan's threshold sits above the
+99.9th percentile of every metric but one. So a 3-robust-SD shift in bout
+rate moves a z-score that is being compared with 12: at one recording the
+scan's detection rate is **1.50 % at 0, 0.25, 0.5, 1, 1.5, 2 and 3 SD alike**
+— its false-alarm rate, to four decimals. "Nearly blind" above is the single
+metric; the scan at one recording is exactly blind to anything up to 3 SD in
+the primary. At two recordings a 3 SD shift lifts it to 4.1 %; at four, 63 %.
+
+Is it one metric's fault? Each metric left out in turn, on the same splits
+and the same pooled draws:
+
+| scan variant | threshold (median z) | delivered false alarms, 1 recording | detects 3 SD in 1 recording | detects 1 SD in 16 recordings |
+|---|---|---|---|---|
+| all eleven | 11.97 | 1.50 % | 0.015 | 0.508 |
+| without turn dispersion | 9.73 | 1.62 % | 0.016 | 0.542 |
+| without median absolute turn | 11.20 | 1.32 % | 0.013 | 0.528 |
+| without inter-bout interval CV | 11.61 | 1.54 % | 0.015 | 0.549 |
+| without any one of the other seven | 11.94–11.97 | 1.43–1.50 % | 0.014–0.015 | 0.510–0.530 |
+| each metric in its own tail (q = 0.9998) | 3.97 on bout rate | 3.81 % | 0.230 | 0.687 at 10.9 % |
+| single metric, bout rate | 3.15 | 1.53 % | 0.478 | 0.832 |
+
+No. Dropping turn dispersion brings the threshold from 12 to 9.7 — median
+absolute turn takes over — and buys 0.03 of power at sixteen recordings; no
+single removal buys more than 0.04. The repair a statistician would reach
+for, testing each metric in its own tail so that the eleven do not share one
+z scale, works and is unaffordable here: the common quantile that puts the
+union of the eleven exceedances at 1 % of the training records is
+**0.9998**, which with about 300 training recordings is each metric's sample
+maximum. It brings the bout-rate threshold down to 3.97, the 3 SD detection
+at one recording up to 0.23 and the 1 SD detection at sixteen to 0.69 — and
+delivers **3.8 %** false alarms at one recording and 10.9 % at sixteen,
+because the maximum of 300 records does not generalise to the next fish. An
+eleven-metric scan at 1 % needs each metric's 1-in-1100 tail, which 300
+recordings cannot supply; the single metric needs the 1-in-100 tail, which
+they can. That, rather than "eleven heavy tails", is the mechanism behind
+finding 5: two tails set the threshold, and the sample is too small to
+calibrate them separately.
+
+The smallest change worth looking for, read from the stored power tables at
+80 % detection (linear interpolation between grid points; "> 3" where a 3 SD
+shift does not reach it; at the delivered false-alarm rates of the previous
+section, not at 1 %):
+
+| pooled recordings | minutes | single metric, SD | scan, SD |
+|---|---|---|---|
+| 1 | 0.4 | > 3 | > 3 |
+| 2 | 0.9 | 2.77 | > 3 |
+| 4 | 1.7 | 1.91 | > 3 |
+| 8 | 3.5 | 1.37 | 2.04 |
+| 16 | 7.0 | 0.97 | 1.35 |
+
+*What this does not show.* The eleven metrics were fixed before the data
+were seen, so "drop turn dispersion" is a post-hoc choice and the row says
+only how much it would have mattered. The per-metric calibration uses the
+same 60 % of fish as everything else, with no separate calibration set; more
+training fish would shrink its 3.8 %, and how fast is not measured. The
+shift is injected into one metric; a stressor that moved several metrics at
+once is a different question, and the scan would meet it on better terms.
+
+These numbers come from `src/scan_threshold_check.py`, which needs the
+recordings, and are pinned by `tests/test_scan_threshold.py`, which does not.
 
 ---
 
@@ -385,8 +479,10 @@ The analysis code is public, in `src/`:
 | `exp2_detector.py` | the frozen detector, its two threshold rules, false alarms and power |
 | `exp3_fp_pinn.py` | neural Kramers–Moyal drift/diffusion, stationary and finite-difference Fokker–Planck, the log-ratio PINN (PyTorch) |
 | `pooling_check.py` | false-alarm rate of the pooled detector vs k, the √k / ICC arithmetic, 2σ/3σ/4σ tails — from the results files alone, no recordings needed |
+| `scan_threshold_check.py` | who sets the scan's threshold: per-metric tails, arg-max of each alarm, leave-one-metric-out and per-metric-calibrated scans on exp2's splits, minimum detectable effect at 80 % (needs the recordings) |
 | `tests/test_all.py` | the ten checks below |
 | `tests/test_readme_numbers.py` | pins the tables on this page to `results/*.json` (runs without the recordings) |
+| `tests/test_scan_threshold.py` | pins the "Who sets the scan's threshold" section to `results/scan_threshold_check.json` (runs without the recordings) |
 
 The recordings are not redistributed; `data/SOURCE.md` says where they come
 from and gives the three-line conversion from the authors' `.mat` file.
