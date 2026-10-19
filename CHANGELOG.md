@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- LICENSE now holds the standard MIT text and LICENSE-CONTENT the standard CC BY 4.0 text, so GitHub recognises the licence (it showed "Other" before). The terms are unchanged; the note on what each licence covers moved to `NOTICE.md`.
 - The scan's calibrated threshold (robust z 11.97 vs 3.15 for the single
   metric) was never explained. Re-run of exp2's 200 splits with the arg-max
   kept: turn dispersion owns 57 % of the scan's alarms, median absolute turn
