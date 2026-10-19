@@ -1,0 +1,23 @@
+{
+  "upload_type": "software",
+  "title": "NavierPINN: A Fish-Behaviour Baseline for Earthquake-Precursor Claims",
+  "description": "Fish-behaviour baseline for earthquake-precursor claims",
+  "creators": [
+    {
+      "name": "Mikhaylov, Dmitry",
+      "orcid": "0009-0009-2108-6820",
+      "affiliation": "Abu Dhabi Maritime Academy, AD Ports Group"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "keywords": [
+    "animal behaviour",
+    "anomaly detection",
+    "aquaculture",
+    "behavioural monitoring",
+    "ethology",
+    "statistical power",
+    "zebrafish"
+  ],
+  "access_right": "open"
+}
