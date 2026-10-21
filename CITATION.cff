@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
 title: "NavierPINN: A Fish-Behaviour Baseline for Earthquake-Precursor Claims"
+doi: "10.5281/zenodo.23529553"
 abstract: "Fish-behaviour baseline for earthquake-precursor claims"
 authors:
   - family-names: Mikhaylov
