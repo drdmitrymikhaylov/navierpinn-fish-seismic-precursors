@@ -8,6 +8,8 @@
 
 # What a camera can tell you about a fish, and what it cannot
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23529553.svg)](https://doi.org/10.5281/zenodo.23529553)
+
 An aquarium monitored by a camera is an attractive idea. The animals are
 continuously visible, tracking is solved, and a behavioural change is supposed
 to signal that something has happened to the water, the equipment or the
